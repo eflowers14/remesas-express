@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Coins, Wallet, Shield, LogOut, LogIn } from "lucide-react";
 
-const ADMIN_EMAIL = "enriquealejandrofloresmarin@gmail.com";
+const ADMIN_EMAIL = "juanenriquefm2006@gmail.com";
 
 export function AppHeader() {
   const navigate = useNavigate();

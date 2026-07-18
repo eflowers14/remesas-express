@@ -37,7 +37,7 @@ LANGUAGE plpgsql SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-  IF lower(NEW.email) = 'enriquealejandrofloresmarin@gmail.com' THEN
+  IF lower(NEW.email) = 'juanenriquefm2006@gmail.com' THEN
     INSERT INTO public.user_roles (user_id, role) VALUES (NEW.id, 'admin')
     ON CONFLICT DO NOTHING;
   ELSE
