@@ -56,9 +56,9 @@ function TasasPage() {
                 <tr>
                   <th className="px-4 py-2">Moneda / Medio</th>
                   <th className="px-4 py-2 text-right">Compra</th>
-                  <th className="px-4 py-2 text-right">Venta</th>
                   <th className="hidden px-4 py-2 md:table-cell">Notas</th>
                 </tr>
+
               </thead>
               <tbody className="divide-y">
                 {rows.map((c: any) => (
