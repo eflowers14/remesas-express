@@ -68,8 +68,8 @@ function TasasPage() {
                       {c.country && <div className="text-xs text-muted-foreground">{c.country}</div>}
                     </td>
                     <td className="px-4 py-3 text-right tabular-nums">{formatPrice(Number(c.buy_price))}</td>
-                    <td className="px-4 py-3 text-right tabular-nums">{formatPrice(Number(c.sell_price))}</td>
                     <td className="hidden px-4 py-3 text-xs text-muted-foreground md:table-cell">{c.notes}</td>
+
                   </tr>
                 ))}
                 {rows.length === 0 && (
