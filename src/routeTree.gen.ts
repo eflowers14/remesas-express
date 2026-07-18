@@ -9,27 +9,155 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedCuentasRouteImport } from './routes/_authenticated/cuentas'
+import { Route as AuthenticatedAdminTasasRouteImport } from './routes/_authenticated/admin.tasas'
+import { Route as AuthenticatedAdminCuentasRouteImport } from './routes/_authenticated/admin.cuentas'
 
-export interface FileRoutesByFullPath {}
-export interface FileRoutesByTo {}
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCuentasRoute = AuthenticatedCuentasRouteImport.update({
+  id: '/cuentas',
+  path: '/cuentas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminTasasRoute = AuthenticatedAdminTasasRouteImport.update({
+  id: '/admin/tasas',
+  path: '/admin/tasas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminCuentasRoute =
+  AuthenticatedAdminCuentasRouteImport.update({
+    id: '/admin/cuentas',
+    path: '/admin/cuentas',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+
+export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
+  '/cuentas': typeof AuthenticatedCuentasRoute
+  '/admin/cuentas': typeof AuthenticatedAdminCuentasRoute
+  '/admin/tasas': typeof AuthenticatedAdminTasasRoute
+}
+export interface FileRoutesByTo {
+  '/auth': typeof AuthRoute
+  '/cuentas': typeof AuthenticatedCuentasRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/admin/cuentas': typeof AuthenticatedAdminCuentasRoute
+  '/admin/tasas': typeof AuthenticatedAdminTasasRoute
+}
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/cuentas': typeof AuthenticatedCuentasRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/admin/cuentas': typeof AuthenticatedAdminCuentasRoute
+  '/_authenticated/admin/tasas': typeof AuthenticatedAdminTasasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: never
+  fullPaths: '/' | '/auth' | '/cuentas' | '/admin/cuentas' | '/admin/tasas'
   fileRoutesByTo: FileRoutesByTo
-  to: never
-  id: '__root__'
+  to: '/auth' | '/cuentas' | '/' | '/admin/cuentas' | '/admin/tasas'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/cuentas'
+    | '/_authenticated/'
+    | '/_authenticated/admin/cuentas'
+    | '/_authenticated/admin/tasas'
   fileRoutesById: FileRoutesById
 }
-export interface RootRouteChildren {}
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {}
+export interface RootRouteChildren {
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
-const rootRouteChildren: RootRouteChildren = {}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cuentas': {
+      id: '/_authenticated/cuentas'
+      path: '/cuentas'
+      fullPath: '/cuentas'
+      preLoaderRoute: typeof AuthenticatedCuentasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/tasas': {
+      id: '/_authenticated/admin/tasas'
+      path: '/admin/tasas'
+      fullPath: '/admin/tasas'
+      preLoaderRoute: typeof AuthenticatedAdminTasasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/cuentas': {
+      id: '/_authenticated/admin/cuentas'
+      path: '/admin/cuentas'
+      fullPath: '/admin/cuentas'
+      preLoaderRoute: typeof AuthenticatedAdminCuentasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+  }
+}
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCuentasRoute: typeof AuthenticatedCuentasRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAdminCuentasRoute: typeof AuthenticatedAdminCuentasRoute
+  AuthenticatedAdminTasasRoute: typeof AuthenticatedAdminTasasRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCuentasRoute: AuthenticatedCuentasRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAdminCuentasRoute: AuthenticatedAdminCuentasRoute,
+  AuthenticatedAdminTasasRoute: AuthenticatedAdminTasasRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
