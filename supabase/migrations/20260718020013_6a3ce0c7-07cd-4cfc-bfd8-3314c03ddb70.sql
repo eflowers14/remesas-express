@@ -64,7 +64,6 @@ CREATE TABLE public.currencies (
   name text NOT NULL,
   country text,
   buy_price numeric(18,4) NOT NULL DEFAULT 0,
-  sell_price numeric(18,4) NOT NULL DEFAULT 0,
   notes text,
   is_active boolean NOT NULL DEFAULT true,
   sort_order integer NOT NULL DEFAULT 0,
