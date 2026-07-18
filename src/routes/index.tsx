@@ -74,7 +74,7 @@ function TasasPage() {
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-sm text-muted-foreground">
+                    <td colSpan={3} className="px-4 py-8 text-center text-sm text-muted-foreground">
                       Sin resultados.
                     </td>
                   </tr>
