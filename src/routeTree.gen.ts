@@ -9,16 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CuentasRouteImport } from './routes/cuentas'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedAdminTasasRouteImport } from './routes/_authenticated/admin.tasas'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CuentasRouteImport } from './routes/cuentas'
 import { Route as AuthenticatedAdminCuentasRouteImport } from './routes/_authenticated/admin.cuentas'
+import { Route as AuthenticatedAdminTasasRouteImport } from './routes/_authenticated/admin.tasas'
 
-const CuentasRoute = CuentasRouteImport.update({
-  id: '/cuentas',
-  path: '/cuentas',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -26,19 +30,10 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const CuentasRoute = CuentasRouteImport.update({
+  id: '/cuentas',
+  path: '/cuentas',
   getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedAdminTasasRoute = AuthenticatedAdminTasasRouteImport.update({
-  id: '/admin/tasas',
-  path: '/admin/tasas',
-  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAdminCuentasRoute =
   AuthenticatedAdminCuentasRouteImport.update({
@@ -46,6 +41,11 @@ const AuthenticatedAdminCuentasRoute =
     path: '/admin/cuentas',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminTasasRoute = AuthenticatedAdminTasasRouteImport.update({
+  id: '/admin/tasas',
+  path: '/admin/tasas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -94,18 +94,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/cuentas': {
-      id: '/cuentas'
-      path: '/cuentas'
-      fullPath: '/cuentas'
-      preLoaderRoute: typeof CuentasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -115,25 +108,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin/tasas': {
-      id: '/_authenticated/admin/tasas'
-      path: '/admin/tasas'
-      fullPath: '/admin/tasas'
-      preLoaderRoute: typeof AuthenticatedAdminTasasRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/cuentas': {
+      id: '/cuentas'
+      path: '/cuentas'
+      fullPath: '/cuentas'
+      preLoaderRoute: typeof CuentasRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/cuentas': {
       id: '/_authenticated/admin/cuentas'
       path: '/admin/cuentas'
       fullPath: '/admin/cuentas'
       preLoaderRoute: typeof AuthenticatedAdminCuentasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/tasas': {
+      id: '/_authenticated/admin/tasas'
+      path: '/admin/tasas'
+      fullPath: '/admin/tasas'
+      preLoaderRoute: typeof AuthenticatedAdminTasasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
@@ -161,3 +161,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
