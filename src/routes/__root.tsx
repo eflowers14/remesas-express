@@ -84,6 +84,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Catálogo de remesas" },
+      { name: "twitter:description", content: "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad" },
     ],
     links: [
       {
