@@ -56,9 +56,9 @@ function TasasPage() {
                 <tr>
                   <th className="px-4 py-2">Moneda / Medio</th>
                   <th className="px-4 py-2 text-right">Compra</th>
-                  <th className="px-4 py-2 text-right">Venta</th>
                   <th className="hidden px-4 py-2 md:table-cell">Notas</th>
                 </tr>
+
               </thead>
               <tbody className="divide-y">
                 {rows.map((c: any) => (
@@ -68,13 +68,13 @@ function TasasPage() {
                       {c.country && <div className="text-xs text-muted-foreground">{c.country}</div>}
                     </td>
                     <td className="px-4 py-3 text-right tabular-nums">{formatPrice(Number(c.buy_price))}</td>
-                    <td className="px-4 py-3 text-right tabular-nums">{formatPrice(Number(c.sell_price))}</td>
                     <td className="hidden px-4 py-3 text-xs text-muted-foreground md:table-cell">{c.notes}</td>
+
                   </tr>
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-sm text-muted-foreground">
+                    <td colSpan={3} className="px-4 py-8 text-center text-sm text-muted-foreground">
                       Sin resultados.
                     </td>
                   </tr>
