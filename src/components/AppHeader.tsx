@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Coins, Wallet, Shield, LogOut, LogIn } from "lucide-react";
 
-const ADMIN_EMAIL = "juanenriquefm2006@gmail.com";
+const ADMIN_EMAILS = ["juanenriquefm2006@gmail.com", "enriquealejandrofloresmarin@gmail.com"];
 
 export function AppHeader() {
   const navigate = useNavigate();
@@ -21,8 +21,7 @@ export function AppHeader() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const isAdmin = email?.toLowerCase() === ADMIN_EMAIL;
-
+  const isAdmin = email && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(email.toLowerCase());
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
