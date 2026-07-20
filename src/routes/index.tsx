@@ -40,7 +40,7 @@ function TasasPage() {
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
         <div>
           <h1 className="text-2xl font-semibold">Tasas de remesas</h1>
-          <p className="text-sm text-muted-foreground">Precios actualizados por el administrador.</p>
+          <p className="text-sm text-muted-foreground">Precios actualizados por el administrador EL ARTE.</p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -54,7 +54,7 @@ function TasasPage() {
             <table className="w-full text-sm">
               <thead className="bg-muted/50 text-left text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="px-4 py-2">Moneda / Medio</th>
+                  <th className="px-4 py-2">Moneda</th>
                   <th className="px-4 py-2 text-right">Compra</th>
                   <th className="hidden px-4 py-2 md:table-cell">Notas</th>
                 </tr>
