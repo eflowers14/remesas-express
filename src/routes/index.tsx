@@ -7,7 +7,7 @@ import { Search } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Catálogo de remesas" }] }),
+  head: () => ({ meta: [{ title: "Catálogo de Remesas" }] }),
   component: TasasPage,
 });
 
