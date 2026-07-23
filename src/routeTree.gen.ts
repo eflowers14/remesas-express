@@ -13,6 +13,7 @@ import { Route as CuentasRouteImport } from './routes/cuentas'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedAdminTasasRouteImport } from './routes/_authenticated/admin.tasas'
 import { Route as AuthenticatedAdminCuentasRouteImport } from './routes/_authenticated/admin.cuentas'
 
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthenticatedAdminTasasRoute = AuthenticatedAdminTasasRouteImport.update({
   id: '/admin/tasas',
   path: '/admin/tasas',
@@ -49,15 +55,17 @@ const AuthenticatedAdminCuentasRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/cuentas': typeof CuentasRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/admin/cuentas': typeof AuthenticatedAdminCuentasRoute
   '/admin/tasas': typeof AuthenticatedAdminTasasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/cuentas': typeof CuentasRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/admin/cuentas': typeof AuthenticatedAdminCuentasRoute
   '/admin/tasas': typeof AuthenticatedAdminTasasRoute
 }
@@ -65,22 +73,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/cuentas': typeof CuentasRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/admin/cuentas': typeof AuthenticatedAdminCuentasRoute
   '/_authenticated/admin/tasas': typeof AuthenticatedAdminTasasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/cuentas' | '/admin/cuentas' | '/admin/tasas'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/cuentas'
+    | '/auth/callback'
+    | '/admin/cuentas'
+    | '/admin/tasas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/cuentas' | '/admin/cuentas' | '/admin/tasas'
+  to:
+    | '/'
+    | '/auth'
+    | '/cuentas'
+    | '/auth/callback'
+    | '/admin/cuentas'
+    | '/admin/tasas'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/cuentas'
+    | '/auth/callback'
     | '/_authenticated/admin/cuentas'
     | '/_authenticated/admin/tasas'
   fileRoutesById: FileRoutesById
@@ -88,7 +110,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   CuentasRoute: typeof CuentasRoute
 }
 
@@ -122,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_authenticated/admin/tasas': {
       id: '/_authenticated/admin/tasas'
       path: '/admin/tasas'
@@ -152,22 +181,22 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   CuentasRoute: CuentasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
