@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import type { Database } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin/tasas")({
   head: () => ({ meta: [{ title: "Admin tasas" }] }),
@@ -15,21 +16,29 @@ export const Route = createFileRoute("/_authenticated/admin/tasas")({
 
 function AdminTasasPage() {
   const getRole = useServerFn(getMyRole);
-  const { data: role, isLoading: roleLoading } = useQuery({ queryKey: ["me-role"], queryFn: () => getRole() });
+  const { data: role, isLoading: roleLoading } = useQuery({
+    queryKey: ["me-role"],
+    queryFn: () => getRole(),
+  });
 
   const listFn = useServerFn(listCurrencies);
   const upsertFn = useServerFn(upsertCurrency);
   const deleteFn = useServerFn(deleteCurrency);
   const qc = useQueryClient();
-  const { data } = useQuery({ queryKey: ["currencies"], queryFn: () => listFn(), enabled: !!role?.isAdmin });
+  const { data } = useQuery<Database["public"]["Tables"]["currencies"]["Row"][]>({
+    queryKey: ["currencies"],
+    queryFn: () => listFn(),
+    enabled: !!role?.isAdmin,
+  });
 
   const upsert = useMutation({
-    mutationFn: (input: any) => upsertFn({ data: input }),
+    mutationFn: (input: Database["public"]["Tables"]["currencies"]["Insert"]) =>
+      upsertFn({ data: input }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["currencies"] });
       toast.success("Guardado");
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: unknown) => toast.error((e as Error).message),
   });
   const del = useMutation({
     mutationFn: (id: string) => deleteFn({ data: { id } }),
@@ -37,13 +46,14 @@ function AdminTasasPage() {
       qc.invalidateQueries({ queryKey: ["currencies"] });
       toast.success("Eliminado");
     },
-    onError: (e: any) => toast.error(e.message),
+    onError: (e: unknown) => toast.error((e as Error).message),
   });
 
   const [newName, setNewName] = useState("");
 
   if (roleLoading) return <p>Cargando…</p>;
-  if (!role?.isAdmin) return <p className="text-sm text-destructive">Acceso solo para administrador.</p>;
+  if (!role?.isAdmin)
+    return <p className="text-sm text-destructive">Acceso solo para administrador.</p>;
 
   return (
     <div className="space-y-4">
@@ -58,8 +68,14 @@ function AdminTasasPage() {
           setNewName("");
         }}
       >
-        <Input placeholder="Nueva moneda / medio…" value={newName} onChange={(e) => setNewName(e.target.value)} />
-        <Button type="submit"><Plus className="mr-1 h-4 w-4" /> Agregar</Button>
+        <Input
+          placeholder="Nueva moneda / medio…"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+        />
+        <Button type="submit">
+          <Plus className="mr-1 h-4 w-4" /> Agregar
+        </Button>
       </form>
 
       <div className="overflow-hidden rounded-lg border bg-card">
@@ -75,8 +91,13 @@ function AdminTasasPage() {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {(data ?? []).map((c: any) => (
-              <EditableRow key={c.id} row={c} onSave={(u) => upsert.mutate(u)} onDelete={() => del.mutate(c.id)} />
+            {(data ?? []).map((c) => (
+              <EditableRow
+                key={c.id}
+                row={c}
+                onSave={(u) => upsert.mutate(u)}
+                onDelete={() => del.mutate(c.id)}
+              />
             ))}
           </tbody>
         </table>
@@ -85,7 +106,15 @@ function AdminTasasPage() {
   );
 }
 
-function EditableRow({ row, onSave, onDelete }: { row: any; onSave: (u: any) => void; onDelete: () => void }) {
+type CurrencyRow = Database["public"]["Tables"]["currencies"]["Row"];
+
+type EditableRowProps = {
+  row: CurrencyRow;
+  onSave: (u: Database["public"]["Tables"]["currencies"]["Update"]) => void;
+  onDelete: () => void;
+};
+
+function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
   const [name, setName] = useState(row.name);
   const [country, setCountry] = useState(row.country ?? "");
   const [buy, setBuy] = useState(String(row.buy_price ?? 0));
@@ -93,11 +122,21 @@ function EditableRow({ row, onSave, onDelete }: { row: any; onSave: (u: any) => 
   const [notes, setNotes] = useState(row.notes ?? "");
   return (
     <tr>
-      <td className="px-2 py-1"><Input value={name} onChange={(e) => setName(e.target.value)} /></td>
-      <td className="px-2 py-1"><Input value={country} onChange={(e) => setCountry(e.target.value)} /></td>
-      <td className="px-2 py-1 w-28"><Input type="number" step="0.0001" value={buy} onChange={(e) => setBuy(e.target.value)} /></td>
-      <td className="px-2 py-1 w-28"><Input type="number" step="0.0001" value={sell} onChange={(e) => setSell(e.target.value)} /></td>
-      <td className="px-2 py-1"><Input value={notes} onChange={(e) => setNotes(e.target.value)} /></td>
+      <td className="px-2 py-1">
+        <Input value={name} onChange={(e) => setName(e.target.value)} />
+      </td>
+      <td className="px-2 py-1">
+        <Input value={country} onChange={(e) => setCountry(e.target.value)} />
+      </td>
+      <td className="px-2 py-1 w-28">
+        <Input type="number" step="0.0001" value={buy} onChange={(e) => setBuy(e.target.value)} />
+      </td>
+      <td className="px-2 py-1 w-28">
+        <Input type="number" step="0.0001" value={sell} onChange={(e) => setSell(e.target.value)} />
+      </td>
+      <td className="px-2 py-1">
+        <Input value={notes} onChange={(e) => setNotes(e.target.value)} />
+      </td>
       <td className="px-2 py-1 whitespace-nowrap">
         <Button
           size="sm"

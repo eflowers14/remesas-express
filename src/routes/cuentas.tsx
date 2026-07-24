@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
+import type { Database } from "@/integrations/supabase/types";
+
+type DepositAccount = Database["public"]["Tables"]["deposit_accounts"]["Row"];
 
 export const Route = createFileRoute("/cuentas")({
   head: () => ({ meta: [{ title: "Cuentas — Catálogo de remesas" }] }),
@@ -12,7 +15,7 @@ export const Route = createFileRoute("/cuentas")({
 });
 
 function CuentasPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<DepositAccount[]>({
     queryKey: ["accounts"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -30,15 +33,20 @@ function CuentasPage() {
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
         <div>
           <h1 className="text-2xl font-semibold">Cuentas de depósito</h1>
-          <p className="text-sm text-muted-foreground">Cuentas disponibles para recibir depósitos.</p>
+          <p className="text-sm text-muted-foreground">
+            Cuentas disponibles para recibir depósitos.
+          </p>
         </div>
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Cargando…</p>
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
-            {(data ?? []).map((a: any) => (
-              <div key={a.id} className={`rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"}`}>
+            {(data ?? []).map((a) => (
+              <div
+                key={a.id}
+                className={`rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"}`}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="font-semibold">{a.bank}</div>

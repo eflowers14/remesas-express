@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,26 +51,28 @@ function AuthPage() {
     toast.success("Cuenta creada. Ya puedes iniciar sesión.");
   }
 
-  async function handleGoogle() {
-    setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setLoading(false);
-      toast.error("No se pudo iniciar sesión con Google");
-      return;
-    }
-    if (result.redirected) return;
-    router.invalidate();
-    navigate({ to: "/", replace: true });
+async function handleGoogle() {
+  setLoading(true);
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    },
+  });
+  if (error) {
+    setLoading(false);
+    toast.error(error.message);
   }
+}
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-lg border bg-card p-6 shadow-sm">
         <h1 className="mb-1 text-2xl font-semibold">Catálogo de remesas</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Inicia sesión para consultar tasas y cuentas.</p>
+        <p className="mb-6 text-sm text-muted-foreground">
+          Inicia sesión para consultar tasas y cuentas.
+        </p>
 
         <Tabs defaultValue="login">
           <TabsList className="grid w-full grid-cols-2">
@@ -83,13 +84,29 @@ function AuthPage() {
             <form onSubmit={handleLogin} className="space-y-3 pt-4">
               <div>
                 <Label htmlFor="email">Correo</Label>
-                <Input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <div>
                 <Label htmlFor="password">Contraseña</Label>
-                <Input id="password" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-              <Button type="submit" disabled={loading} className="w-full">Ingresar</Button>
+              <Button type="submit" disabled={loading} className="w-full">
+                Ingresar
+              </Button>
             </form>
           </TabsContent>
 
@@ -97,13 +114,30 @@ function AuthPage() {
             <form onSubmit={handleSignup} className="space-y-3 pt-4">
               <div>
                 <Label htmlFor="email2">Correo</Label>
-                <Input id="email2" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input
+                  id="email2"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <div>
                 <Label htmlFor="password2">Contraseña</Label>
-                <Input id="password2" type="password" autoComplete="new-password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Input
+                  id="password2"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-              <Button type="submit" disabled={loading} className="w-full">Crear cuenta</Button>
+              <Button type="submit" disabled={loading} className="w-full">
+                Crear cuenta
+              </Button>
             </form>
           </TabsContent>
         </Tabs>

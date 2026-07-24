@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
 
 // ---- Currencies ----
 
@@ -27,7 +29,9 @@ const currencyInput = z.object({
   sort_order: z.number().int().optional(),
 });
 
-async function assertAdmin(context: { supabase: any; userId: string }) {
+type ServerContext = { supabase: SupabaseClient<Database>; userId: string };
+
+async function assertAdmin(context: ServerContext) {
   const { data, error } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,
     _role: "admin",
@@ -90,10 +94,20 @@ export const upsertAccount = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => accountInput.parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
-    const email = data.email === "" ? null : data.email ?? null;
-    const payload = { ...data, email, updated_by: context.userId, updated_at: new Date().toISOString() };
+    const email = data.email === "" ? null : (data.email ?? null);
+    const payload = {
+      ...data,
+      email,
+      updated_by: context.userId,
+      updated_at: new Date().toISOString(),
+    };
     const q = data.id
-      ? context.supabase.from("deposit_accounts").update(payload).eq("id", data.id).select().single()
+      ? context.supabase
+          .from("deposit_accounts")
+          .update(payload)
+          .eq("id", data.id)
+          .select()
+          .single()
       : context.supabase.from("deposit_accounts").insert(payload).select().single();
     const { data: row, error } = await q;
     if (error) throw new Error(error.message);

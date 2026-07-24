@@ -21,7 +21,7 @@ export function AppHeader() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const isAdmin = email && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(email.toLowerCase());
+  const isAdmin = email && ADMIN_EMAILS.map((e) => e.toLowerCase()).includes(email.toLowerCase());
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -74,7 +74,9 @@ export function AppHeader() {
               <span className="hidden text-xs text-muted-foreground sm:block">
                 {email}
                 {isAdmin && (
-                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">admin</span>
+                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">
+                    admin
+                  </span>
                 )}
               </span>
               <Button variant="ghost" size="sm" onClick={signOut} title="Cerrar sesión">

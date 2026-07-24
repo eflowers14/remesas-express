@@ -32,4 +32,4 @@ dist-ssr
 *.sw?
 
 # Variables
-.env
+*.env
