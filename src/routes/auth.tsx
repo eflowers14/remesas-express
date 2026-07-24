@@ -1,6 +1,10 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,6 +55,7 @@ function AuthPage() {
     toast.success("Cuenta creada. Ya puedes iniciar sesión.");
   }
 
+<<<<<<< HEAD
 async function handleGoogle() {
   setLoading(true);
   const { error } = await supabase.auth.signInWithOAuth({
@@ -62,6 +67,18 @@ async function handleGoogle() {
   if (error) {
     setLoading(false);
     toast.error(error.message);
+=======
+  async function handleGoogle() {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+    if (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+>>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
   }
 }
 

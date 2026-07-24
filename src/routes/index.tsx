@@ -10,7 +10,7 @@ import type { Database } from "@/integrations/supabase/types";
 type CurrencyRow = Database["public"]["Tables"]["currencies"]["Row"];
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Catálogo de remesas" }] }),
+  head: () => ({ meta: [{ title: "Catálogo de Remesas" }] }),
   component: TasasPage,
 });
 

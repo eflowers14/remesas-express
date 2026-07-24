@@ -1,27 +1,41 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { getMyRole } from "@/lib/catalog.functions";
 import { Button } from "@/components/ui/button";
 import { Coins, Wallet, Shield, LogOut, LogIn } from "lucide-react";
-
-const ADMIN_EMAILS = ["juanenriquefm2006@gmail.com", "enriquealejandrofloresmarin@gmail.com"];
 
 export function AppHeader() {
   const navigate = useNavigate();
   const router = useRouter();
   const queryClient = useQueryClient();
   const [email, setEmail] = useState<string | null>(null);
+  const getRole = useServerFn(getMyRole);
+  const { data: role, isLoading: roleLoading } = useQuery({ queryKey: ["me-role"], queryFn: () => getRole() });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
+    supabase.auth.getSession().then(({ data }) => {
+      setEmail(data.session?.user.email ?? null);
+      if (data.session) {
+        queryClient.invalidateQueries({ queryKey: ["me-role"] });
+      }
+    });
+
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
       setEmail(session?.user.email ?? null);
+      queryClient.invalidateQueries({ queryKey: ["me-role"] });
     });
-    return () => sub.subscription.unsubscribe();
-  }, []);
 
+<<<<<<< HEAD
   const isAdmin = email && ADMIN_EMAILS.map((e) => e.toLowerCase()).includes(email.toLowerCase());
+=======
+    return () => sub.subscription.unsubscribe();
+  }, [queryClient]);
+
+  const isAdmin = role?.isAdmin;
+>>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -49,7 +63,7 @@ export function AppHeader() {
           >
             <Wallet className="h-4 w-4" /> Cuentas
           </Link>
-          {isAdmin && (
+          {!roleLoading && isAdmin && (
             <>
               <Link
                 to="/admin/tasas"
@@ -73,11 +87,17 @@ export function AppHeader() {
             <>
               <span className="hidden text-xs text-muted-foreground sm:block">
                 {email}
+<<<<<<< HEAD
                 {isAdmin && (
                   <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">
                     admin
                   </span>
                 )}
+=======
+                {roleLoading ? null : isAdmin ? (
+                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">admin</span>
+                ) : null}
+>>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
               </span>
               <Button variant="ghost" size="sm" onClick={signOut} title="Cerrar sesión">
                 <LogOut className="h-4 w-4" />
