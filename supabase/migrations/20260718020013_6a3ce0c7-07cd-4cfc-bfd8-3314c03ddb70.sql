@@ -1,5 +1,7 @@
 
 -- Enum de roles
+-- Eliminar si existe y crear de nuevo
+DROP TYPE IF EXISTS public.app_role CASCADE;
 CREATE TYPE public.app_role AS ENUM ('admin', 'user');
 
 -- user_roles
