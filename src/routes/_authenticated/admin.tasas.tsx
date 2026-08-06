@@ -35,7 +35,7 @@ function AdminTasasPage() {
     mutationFn: (
       input:
         | Database["public"]["Tables"]["currencies"]["Insert"]
-        | Database["public"]["Tables"]["currencies"]["Update"]
+        | Database["public"]["Tables"]["currencies"]["Update"],
     ) => upsertFn({ data: input as any }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["currencies"] });
@@ -116,7 +116,7 @@ type EditableRowProps = {
   onSave: (
     u:
       | Database["public"]["Tables"]["currencies"]["Update"]
-      | Database["public"]["Tables"]["currencies"]["Insert"]
+      | Database["public"]["Tables"]["currencies"]["Insert"],
   ) => void;
   onDelete: () => void;
 };
