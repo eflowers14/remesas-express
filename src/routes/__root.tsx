@@ -78,38 +78,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-<<<<<<< HEAD
-      { title: "Catálogo de remesas" },
-      {
-        name: "description",
-        content:
-          "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador.",
-      },
-      { property: "og:title", content: "Catálogo de remesas" },
-      {
-        property: "og:description",
-        content:
-          "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Catálogo de remesas" },
-      {
-        name: "twitter:description",
-        content:
-          "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador.",
-      },
-      {
-        property: "og:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad",
-      },
-=======
       { title: "Catálogo de Remesas" },
       { name: "description", content: "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador." },
       { property: "og:title", content: "Catálogo de Remesas" },
@@ -120,7 +88,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad" },
->>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
     ],
     links: [
       {
