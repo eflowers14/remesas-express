@@ -32,8 +32,11 @@ function AdminTasasPage() {
   });
 
   const upsert = useMutation({
-    mutationFn: (input: Database["public"]["Tables"]["currencies"]["Insert"]) =>
-      upsertFn({ data: input }),
+    mutationFn: (
+      input:
+        | Database["public"]["Tables"]["currencies"]["Insert"]
+        | Database["public"]["Tables"]["currencies"]["Update"]
+    ) => upsertFn({ data: input as any }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["currencies"] });
       toast.success("Guardado");
@@ -110,7 +113,11 @@ type CurrencyRow = Database["public"]["Tables"]["currencies"]["Row"];
 
 type EditableRowProps = {
   row: CurrencyRow;
-  onSave: (u: Database["public"]["Tables"]["currencies"]["Update"]) => void;
+  onSave: (
+    u:
+      | Database["public"]["Tables"]["currencies"]["Update"]
+      | Database["public"]["Tables"]["currencies"]["Insert"]
+  ) => void;
   onDelete: () => void;
 };
 

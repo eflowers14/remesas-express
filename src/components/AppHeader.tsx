@@ -28,14 +28,10 @@ export function AppHeader() {
       queryClient.invalidateQueries({ queryKey: ["me-role"] });
     });
 
-<<<<<<< HEAD
-  const isAdmin = email && ADMIN_EMAILS.map((e) => e.toLowerCase()).includes(email.toLowerCase());
-=======
     return () => sub.subscription.unsubscribe();
   }, [queryClient]);
 
   const isAdmin = role?.isAdmin;
->>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -87,17 +83,9 @@ export function AppHeader() {
             <>
               <span className="hidden text-xs text-muted-foreground sm:block">
                 {email}
-<<<<<<< HEAD
-                {isAdmin && (
-                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">
-                    admin
-                  </span>
-                )}
-=======
                 {roleLoading ? null : isAdmin ? (
                   <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">admin</span>
                 ) : null}
->>>>>>> 9f61cefcb526b5cd717ecec664f84d55773fd664
               </span>
               <Button variant="ghost" size="sm" onClick={signOut} title="Cerrar sesión">
                 <LogOut className="h-4 w-4" />
