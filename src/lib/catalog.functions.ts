@@ -23,7 +23,6 @@ const currencyInput = z.object({
   name: z.string().trim().min(1).max(100),
   country: z.string().trim().max(80).nullable().optional(),
   buy_price: z.number().nonnegative(),
-  sell_price: z.number().nonnegative(),
   notes: z.string().trim().max(500).nullable().optional(),
   is_active: z.boolean().optional(),
   sort_order: z.number().int().optional(),

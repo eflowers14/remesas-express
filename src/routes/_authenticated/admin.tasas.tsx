@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
+import type { TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin/tasas")({
   head: () => ({ meta: [{ title: "Admin tasas" }] }),
@@ -32,11 +33,7 @@ function AdminTasasPage() {
   });
 
   const upsert = useMutation({
-    mutationFn: (
-      input:
-        | Database["public"]["Tables"]["currencies"]["Insert"]
-        | Database["public"]["Tables"]["currencies"]["Update"]
-    ) => upsertFn({ data: input as any }),
+    mutationFn: (input: CurrencyInput) => upsertFn({ data: input }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["currencies"] });
       toast.success("Guardado");
@@ -67,7 +64,7 @@ function AdminTasasPage() {
         onSubmit={(e) => {
           e.preventDefault();
           if (!newName.trim()) return;
-          upsert.mutate({ name: newName.trim(), buy_price: 0, sell_price: 0 });
+          upsert.mutate({ name: newName.trim(), buy_price: 0});
           setNewName("");
         }}
       >
@@ -116,7 +113,7 @@ type EditableRowProps = {
   onSave: (
     u:
       | Database["public"]["Tables"]["currencies"]["Update"]
-      | Database["public"]["Tables"]["currencies"]["Insert"]
+      | Database["public"]["Tables"]["currencies"]["Insert"],
   ) => void;
   onDelete: () => void;
 };
@@ -125,7 +122,6 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
   const [name, setName] = useState(row.name);
   const [country, setCountry] = useState(row.country ?? "");
   const [buy, setBuy] = useState(String(row.buy_price ?? 0));
-  const [sell, setSell] = useState(String(row.sell_price ?? 0));
   const [notes, setNotes] = useState(row.notes ?? "");
   return (
     <tr>
@@ -137,9 +133,6 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
       </td>
       <td className="px-2 py-1 w-28">
         <Input type="number" step="0.0001" value={buy} onChange={(e) => setBuy(e.target.value)} />
-      </td>
-      <td className="px-2 py-1 w-28">
-        <Input type="number" step="0.0001" value={sell} onChange={(e) => setSell(e.target.value)} />
       </td>
       <td className="px-2 py-1">
         <Input value={notes} onChange={(e) => setNotes(e.target.value)} />
@@ -153,7 +146,6 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
               name,
               country: country || null,
               buy_price: Number(buy) || 0,
-              sell_price: Number(sell) || 0,
               notes: notes || null,
             })
           }
@@ -167,3 +159,5 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
     </tr>
   );
 }
+
+type CurrencyInput = TablesInsert<"currencies"> | TablesUpdate<"currencies">;

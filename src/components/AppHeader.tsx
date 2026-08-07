@@ -13,7 +13,10 @@ export function AppHeader() {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState<string | null>(null);
   const getRole = useServerFn(getMyRole);
-  const { data: role, isLoading: roleLoading } = useQuery({ queryKey: ["me-role"], queryFn: () => getRole() });
+  const { data: role, isLoading: roleLoading } = useQuery({
+    queryKey: ["me-role"],
+    queryFn: () => getRole(),
+  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -84,7 +87,9 @@ export function AppHeader() {
               <span className="hidden text-xs text-muted-foreground sm:block">
                 {email}
                 {roleLoading ? null : isAdmin ? (
-                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">admin</span>
+                  <span className="ml-1 rounded bg-primary/10 px-1.5 py-0.5 text-primary">
+                    admin
+                  </span>
                 ) : null}
               </span>
               <Button variant="ghost" size="sm" onClick={signOut} title="Cerrar sesión">
