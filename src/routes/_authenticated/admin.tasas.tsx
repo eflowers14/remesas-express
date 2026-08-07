@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
+import type { TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/_authenticated/admin/tasas")({
   head: () => ({ meta: [{ title: "Admin tasas" }] }),
@@ -32,11 +33,7 @@ function AdminTasasPage() {
   });
 
   const upsert = useMutation({
-    mutationFn: (
-      input:
-        | Database["public"]["Tables"]["currencies"]["Insert"]
-        | Database["public"]["Tables"]["currencies"]["Update"],
-    ) => upsertFn({ data: input as any }),
+    mutationFn: (input: CurrencyInput) => upsertFn({ data: input }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["currencies"] });
       toast.success("Guardado");
@@ -167,3 +164,5 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
     </tr>
   );
 }
+
+type CurrencyInput = TablesInsert<"currencies"> | TablesUpdate<"currencies">;
