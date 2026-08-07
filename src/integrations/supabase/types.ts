@@ -16,7 +16,6 @@ export type Database = {
           is_active: boolean;
           name: string;
           notes: string | null;
-          sell_price: number;
           sort_order: number;
           updated_at: string;
           updated_by: string | null;
@@ -28,7 +27,6 @@ export type Database = {
           is_active?: boolean;
           name: string;
           notes?: string | null;
-          sell_price?: number;
           sort_order?: number;
           updated_at?: string;
           updated_by?: string | null;
@@ -40,7 +38,6 @@ export type Database = {
           is_active?: boolean;
           name?: string;
           notes?: string | null;
-          sell_price?: number;
           sort_order?: number;
           updated_at?: string;
           updated_by?: string | null;
