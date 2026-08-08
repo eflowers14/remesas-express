@@ -85,7 +85,6 @@ function AdminTasasPage() {
               <th className="px-3 py-2">Nombre</th>
               <th className="px-3 py-2">País</th>
               <th className="px-3 py-2">Compra</th>
-              <th className="px-3 py-2">Venta</th>
               <th className="px-3 py-2">Notas</th>
               <th className="px-3 py-2"></th>
             </tr>
@@ -121,7 +120,7 @@ type EditableRowProps = {
 function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
   const [name, setName] = useState(row.name);
   const [country, setCountry] = useState(row.country ?? "");
-  const [buy, setBuy] = useState(String(row.buy_price ?? 0));
+  const [buy, setBuy] = useState(String(row.buy_price ?? 0) + "CUP");
   const [notes, setNotes] = useState(row.notes ?? "");
   return (
     <tr>
