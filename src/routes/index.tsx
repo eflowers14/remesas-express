@@ -45,7 +45,7 @@ function TasasPage() {
       <AppHeader />
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
         <div>
-          <h1 className="text-2xl font-semibold">Tasas de remesas</h1>
+          <h1 className="text-2xl font-semibold">Tasas de Remesas</h1>
           <p className="text-sm text-muted-foreground">
             Precios actualizados por el administrador EL ARTE.
           </p>
@@ -82,7 +82,7 @@ function TasasPage() {
                       )}
                     </td>
                     <td className="px-4 py-3 text-right tabular-nums">
-                      {formatPrice(Number(c.buy_price))}
+                      {formatPrice(Number(c.buy_price))}cup
                     </td>
                     <td className="hidden px-4 py-3 text-xs text-muted-foreground md:table-cell">
                       {c.notes}
