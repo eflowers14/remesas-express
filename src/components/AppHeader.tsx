@@ -49,7 +49,7 @@ export function AppHeader() {
         <div className="flex items-center gap-1 overflow-x-auto">
           <Link
             to="/"
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-100 hover:bg-accent"
             activeProps={{ className: "bg-accent" }}
             activeOptions={{ exact: true }}
           >
@@ -57,7 +57,7 @@ export function AppHeader() {
           </Link>
           <Link
             to="/cuentas"
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-100 hover:bg-accent"
             activeProps={{ className: "bg-accent" }}
           >
             <Wallet className="h-4 w-4" /> Cuentas
@@ -66,14 +66,14 @@ export function AppHeader() {
             <>
               <Link
                 to="/admin/tasas"
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-100 hover:bg-accent"
                 activeProps={{ className: "bg-accent" }}
               >
                 <Shield className="h-4 w-4" /> Admin tasas
               </Link>
               <Link
                 to="/admin/cuentas"
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all duration-100 hover:bg-accent"
                 activeProps={{ className: "bg-accent" }}
               >
                 <Shield className="h-4 w-4" /> Admin cuentas
@@ -99,7 +99,7 @@ export function AppHeader() {
           ) : (
             <Button asChild variant="outline" size="sm">
               <Link to="/auth">
-                <LogIn className="mr-1 h-4 w-4" /> Iniciar sesión
+                <LogIn className="mr-1 h-4 w-4 transition-all duration-100" /> Iniciar sesión
               </Link>
             </Button>
           )}

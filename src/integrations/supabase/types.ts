@@ -12,6 +12,7 @@ export type Database = {
         Row: {
           buy_price: number;
           country: string | null;
+          deposit_account_id: string | null;
           id: string;
           is_active: boolean;
           name: string;
@@ -23,6 +24,7 @@ export type Database = {
         Insert: {
           buy_price?: number;
           country?: string | null;
+          deposit_account_id?: string | null;
           id?: string;
           is_active?: boolean;
           name: string;
@@ -34,6 +36,7 @@ export type Database = {
         Update: {
           buy_price?: number;
           country?: string | null;
+          deposit_account_id?: string | null;
           id?: string;
           is_active?: boolean;
           name?: string;

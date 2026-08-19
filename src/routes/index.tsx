@@ -88,7 +88,16 @@ function TasasPage() {
                       {c.country && (
                         <div className="text-xs text-muted-foreground">{c.country}</div>
                       )}
-                      {c.name}
+                      {c.deposit_account_id ? (
+                        <a
+                          href={`/cuentas#${c.deposit_account_id}`}
+                          className="hover:underline"
+                        >
+                          {c.name}
+                        </a>
+                      ) : (
+                        c.name
+                      )}
                     </td>
                     <td className="px-1 py-2 text-right tabular-nums">
                       {formatPrice(Number(c.buy_price))}cup

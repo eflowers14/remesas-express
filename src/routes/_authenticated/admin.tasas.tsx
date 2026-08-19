@@ -2,9 +2,22 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { listCurrencies, upsertCurrency, deleteCurrency, getMyRole } from "@/lib/catalog.functions";
+import {
+  listAccounts,
+  listCurrencies,
+  upsertCurrency,
+  deleteCurrency,
+  getMyRole,
+} from "@/lib/catalog.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Database } from "@/integrations/supabase/types";
@@ -23,12 +36,18 @@ function AdminTasasPage() {
   });
 
   const listFn = useServerFn(listCurrencies);
+  const listAccountsFn = useServerFn(listAccounts);
   const upsertFn = useServerFn(upsertCurrency);
   const deleteFn = useServerFn(deleteCurrency);
   const qc = useQueryClient();
   const { data } = useQuery<Database["public"]["Tables"]["currencies"]["Row"][]>({
     queryKey: ["currencies"],
     queryFn: () => listFn(),
+    enabled: !!role?.isAdmin,
+  });
+  const { data: accounts } = useQuery<Database["public"]["Tables"]["deposit_accounts"]["Row"][]>({
+    queryKey: ["accounts"],
+    queryFn: () => listAccountsFn(),
     enabled: !!role?.isAdmin,
   });
 
@@ -86,6 +105,7 @@ function AdminTasasPage() {
               <th className="px-3 py-2">País</th>
               <th className="px-3 py-2">Compra</th>
               <th className="px-3 py-2">Notas</th>
+              <th className="px-3 py-2">Cuenta de depósito</th>
               <th className="px-3 py-2"></th>
             </tr>
           </thead>
@@ -94,6 +114,7 @@ function AdminTasasPage() {
               <EditableRow
                 key={c.id}
                 row={c}
+                accounts={accounts ?? []}
                 onSave={(u) => upsert.mutate(u)}
                 onDelete={() => del.mutate(c.id)}
               />
@@ -109,6 +130,7 @@ type CurrencyRow = Database["public"]["Tables"]["currencies"]["Row"];
 
 type EditableRowProps = {
   row: CurrencyRow;
+  accounts: Database["public"]["Tables"]["deposit_accounts"]["Row"][];
   onSave: (
     u:
       | Database["public"]["Tables"]["currencies"]["Update"]
@@ -117,11 +139,12 @@ type EditableRowProps = {
   onDelete: () => void;
 };
 
-function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
+function EditableRow({ row, accounts, onSave, onDelete }: EditableRowProps) {
   const [name, setName] = useState(row.name);
   const [country, setCountry] = useState(row.country ?? "");
   const [buy, setBuy] = useState(String(row.buy_price ?? 0) + "CUP");
   const [notes, setNotes] = useState(row.notes ?? "");
+  const [accountId, setAccountId] = useState(row.deposit_account_id ?? "none");
   return (
     <tr>
       <td className="px-2 py-1">
@@ -136,6 +159,21 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
       <td className="px-2 py-1">
         <Input value={notes} onChange={(e) => setNotes(e.target.value)} />
       </td>
+      <td className="px-2 py-1 min-w-48">
+        <Select value={accountId} onValueChange={setAccountId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Sin cuenta" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">Sin cuenta</SelectItem>
+            {accounts.map((account) => (
+              <SelectItem key={account.id} value={account.id}>
+                {account.bank} - {account.account_number}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </td>
       <td className="px-2 py-1 whitespace-nowrap">
         <Button
           size="sm"
@@ -146,6 +184,7 @@ function EditableRow({ row, onSave, onDelete }: EditableRowProps) {
               country: country || null,
               buy_price: Number(buy) || 0,
               notes: notes || null,
+              deposit_account_id: accountId === "none" ? null : accountId,
             })
           }
         >
