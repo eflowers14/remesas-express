@@ -41,13 +41,13 @@ function TasasPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen fondo">
       <AppHeader />
-      <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
+      <main className="mx-auto max-w-6xl space-y-4 px-4 py-6 rounded-2">
         <div>
-          <h1 className="text-2xl font-semibold">Tasas de Remesas</h1>
+          <h1 className="text-2xl font-semibold right-0">Tasas de Remesas</h1>
           <p className="text-sm text-muted-foreground">
-            Precios actualizados por el administrador EL ARTE.
+            Consulta nuestros precios actualizados y descubre el valor de tu moneda.
           </p>
         </div>
         <div className="relative">
@@ -63,8 +63,8 @@ function TasasPage() {
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Cargando…</p>
         ) : (
-          <div className="overflow-hidden rounded-lg border bg-card">
-            <table className="w-full text-sm">
+          <div className="overflow-hidden rounded-lg bg-card border border-outside-border">
+            <table className="w-full text-sm border">
               <thead className="bg-muted/50 text-left text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="px-4 py-2">Moneda</th>
