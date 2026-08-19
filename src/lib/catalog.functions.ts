@@ -22,6 +22,7 @@ const currencyInput = z.object({
   id: z.string().uuid().optional(),
   name: z.string().trim().min(1).max(100),
   country: z.string().trim().max(80).nullable().optional(),
+  deposit_account_id: z.string().uuid().nullable().optional(),
   buy_price: z.number().nonnegative(),
   notes: z.string().trim().max(500).nullable().optional(),
   is_active: z.boolean().optional(),

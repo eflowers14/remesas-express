@@ -8,4 +8,4 @@ Poner una columna para que agregue automaticamente la fecha en que se edito o cr
 
 Hacer que cada nombre de la moneda lleve a la cuenta en el que se puede depositar
 
-Poner soporte
+Poner soporte y advertencia legal

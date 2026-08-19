@@ -10,7 +10,7 @@ import type { Database } from "@/integrations/supabase/types";
 type DepositAccount = Database["public"]["Tables"]["deposit_accounts"]["Row"];
 
 export const Route = createFileRoute("/cuentas")({
-  head: () => ({ meta: [{ title: "Cuentas — Catálogo de remesas" }] }),
+  head: () => ({ meta: [{ title: "Cuentas" }] }),
   component: CuentasPage,
 });
 
@@ -45,6 +45,7 @@ function CuentasPage() {
             {(data ?? []).map((a) => (
               <div
                 key={a.id}
+                id={a.id}
                 className={`rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"}`}
               >
                 <div className="flex items-start justify-between gap-2">
