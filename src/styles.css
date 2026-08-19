@@ -156,7 +156,4 @@
   .glass {
     backdrop-filter: blur(10px);
   }
-  button {
-    box-shadow: 0 0 0 20px;
-  }
 }
