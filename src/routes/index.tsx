@@ -19,6 +19,14 @@ function formatPrice(n: number) {
   return new Intl.NumberFormat("es-ES", { maximumFractionDigits: 4 }).format(n);
 }
 
+function formatUpdatedAt(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return new Intl.DateTimeFormat("es-ES", {
+    dateStyle: "short"
+  }).format(date);
+}
+
 function TasasPage() {
   const { data, isLoading } = useQuery<CurrencyRow[]>({
     queryKey: ["currencies"],
@@ -63,35 +71,39 @@ function TasasPage() {
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Cargando…</p>
         ) : (
-          <div className="overflow-hidden rounded-lg bg-card border border-outside-border">
-            <table className="w-full text-sm border">
+          <div className="overflow-hidden bg-card border-outside-border fondo-opuesto">
+            <table className="w-full table-fixed text-sm border">
               <thead className="bg-muted/50 text-left text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="px-4 py-2">Moneda</th>
-                  <th className="px-4 py-2 text-right">Compra</th>
-                  <th className="hidden px-4 py-2 md:table-cell">Notas</th>
+                  <th className="w-1/3 px-4 py-2">Moneda</th>
+                  <th className="w-1/3 px-4 py-2 text-right">Compra</th>
+                  <th className="w-1/5 px-4 py-2 text-center">Notas</th>
+                  <th className="w-1/6 px-4 py-2 text-center">Fecha</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {rows.map((c) => (
                   <tr key={c.id} className={c.is_active ? "" : "opacity-50"}>
                     <td className="px-4 py-3 font-medium">
-                      {c.name}
                       {c.country && (
                         <div className="text-xs text-muted-foreground">{c.country}</div>
                       )}
+                      {c.name}
                     </td>
-                    <td className="px-4 py-3 text-right tabular-nums">
+                    <td className="px-1 py-2 text-right tabular-nums">
                       {formatPrice(Number(c.buy_price))}cup
                     </td>
-                    <td className="hidden px-4 py-3 text-xs text-muted-foreground md:table-cell">
+                    <td className="px-1 py-2 text-xs text-center text-muted-foreground">
                       {c.notes}
+                    </td>
+                    <td className="px-1 py-2 text-xs text-center text-muted-foreground">
+                      {formatUpdatedAt(c.updated_at)}
                     </td>
                   </tr>
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-4 py-8 text-center text-sm text-muted-foreground">
+                    <td colSpan={4} className="px-1 py-2 text-center text-sm text-muted-foreground">
                       Sin resultados.
                     </td>
                   </tr>
