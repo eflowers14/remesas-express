@@ -157,3 +157,57 @@
     backdrop-filter: blur(10px);
   }
 }
+
+@keyframes select-content-open {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.select-trigger:not(:disabled) {
+  cursor: pointer;
+}
+
+.select-trigger:disabled {
+  cursor: not-allowed;
+}
+
+@keyframes select-content-close {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.select-content-menu[data-state="open"] {
+  animation: select-content-open 150ms ease-out;
+}
+
+.select-content-menu[data-state="closed"] {
+  animation: select-content-close 150ms ease-in;
+}
+
+.select-content-popper[data-side="bottom"] {
+  margin-top: 0.25rem;
+}
+
+.select-content-popper[data-side="top"] {
+  margin-bottom: 0.25rem;
+}
+
+.select-content-popper[data-side="left"] {
+  margin-right: 0.25rem;
+}
+
+.select-content-popper[data-side="right"] {
+  margin-left: 0.25rem;
+}
