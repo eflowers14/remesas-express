@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Catálogo de Remesas" },
       {
-        name: "description",
+        name: "Remesas Express",
         content:
           "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador.",
       },

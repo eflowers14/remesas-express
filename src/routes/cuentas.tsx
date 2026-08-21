@@ -38,19 +38,19 @@ function CuentasPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen fondo">
       <AppHeader />
       <main className="mx-auto max-w-6xl space-y-4 px-4 py-6">
         <div>
-          <h1 className="text-2xl font-semibold">Cuentas de depósito</h1>
+          <h1 className="text-2xl font-semibold">Cuentas de Depósito</h1>
           <p className="text-sm text-muted-foreground">
-            Cuentas disponibles para recibir depósitos.
+            Cuentas Disponibles para Recibir Depósitos.
           </p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Buscar cuenta por moneda o banco…"
+            placeholder="Buscar Cuenta por Moneda o Banco…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="pl-9"
@@ -65,7 +65,7 @@ function CuentasPage() {
               <div
                 key={a.id}
                 id={a.id}
-                className={`rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"}`}
+                className={`rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"} fondo-opuesto`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -102,8 +102,8 @@ function CuentasPage() {
                 </dl>
               </div>
             ))}
-            {(data ?? []).length === 0 && (
-              <p className="text-sm text-muted-foreground">Aún no hay cuentas cargadas.</p>
+            {rows.length === 0 && (
+              <p className="text-sm text-muted-foreground">Aún no hay Cuentas Cargadas, escribe a Soporte solicitando la cuenta.</p>
             )}
           </div>
         )}
