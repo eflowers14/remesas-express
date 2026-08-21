@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
 import type { Database } from "@/integrations/supabase/types";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 type DepositAccount = Database["public"]["Tables"]["deposit_accounts"]["Row"];
 
@@ -26,6 +29,13 @@ function CuentasPage() {
       return data ?? [];
     },
   });
+  const [q, setQ] = useState("");
+  const rows = (data ?? []).filter(
+    (c) =>
+      !q ||
+      c.bank.toLowerCase().includes(q.toLowerCase()) ||
+      (c.currency ?? "").toLowerCase().includes(q.toLowerCase()),
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -37,12 +47,21 @@ function CuentasPage() {
             Cuentas disponibles para recibir depósitos.
           </p>
         </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Buscar cuenta por moneda o banco…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="pl-9"
+          />
+        </div>
 
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Cargando…</p>
         ) : (
           <div className="grid gap-3 md:grid-cols-2">
-            {(data ?? []).map((a) => (
+            {rows.map((a) => (
               <div
                 key={a.id}
                 id={a.id}
