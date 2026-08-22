@@ -211,3 +211,6 @@
 .select-content-popper[data-side="right"] {
   margin-left: 0.25rem;
 }
+footer{
+   border: 0 0 2px #fff;
+}
