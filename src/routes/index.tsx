@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
+import { AppFooter } from "@/components/AppFooter";
 import type { Database } from "@/integrations/supabase/types";
 
 type CurrencyRow = Database["public"]["Tables"]["currencies"]["Row"];
@@ -121,7 +122,8 @@ function TasasPage() {
             </table>
           </div>
         )}
-      </main>
+      </main>  
+      <AppFooter />
     </div>
   );
 }

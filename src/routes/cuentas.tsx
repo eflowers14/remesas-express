@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 import { AppHeader } from "@/components/AppHeader";
+import { AppFooter } from "@/components/AppFooter";
 import type { Database } from "@/integrations/supabase/types";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -103,11 +104,12 @@ function CuentasPage() {
               </div>
             ))}
             {rows.length === 0 && (
-              <p className="text-sm text-muted-foreground">Aún no hay Cuentas Cargadas, escribe a Soporte solicitando la cuenta.</p>
+              <h2 className="grid md:grid-cols-1 mx-auto text-sidebar-foreground">Aún no hay Cuentas Cargadas, escribe a Soporte solicitando la cuenta.</h2>
             )}
           </div>
         )}
       </main>
+      <AppFooter />
     </div>
   );
 }
