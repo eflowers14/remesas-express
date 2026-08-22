@@ -65,7 +65,7 @@ function CuentasPage() {
               <div
                 key={a.id}
                 id={a.id}
-                className={`rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"} fondo-opuesto`}
+                className={`overflow-hidden rounded-lg border bg-card p-4 ${a.is_active ? "" : "opacity-50"} fondo-opuesto`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
