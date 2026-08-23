@@ -18,6 +18,8 @@ export const Route = createFileRoute("/cuentas")({
   component: CuentasPage,
 });
 
+const contact = ["+5355078599", "+5363646898"];
+
 function CuentasPage() {
   const { data, isLoading } = useQuery<DepositAccount[]>({
     queryKey: ["accounts"],
@@ -107,7 +109,12 @@ function CuentasPage() {
               <h2 className="grid md:grid-cols-1 mx-auto text-sidebar-foreground">Aún no hay Cuentas Cargadas, escribe a Soporte solicitando la cuenta.</h2>
             )}
           </div>
+          
         )}
+        <p className="pt-3 grid mb-0 text-center mx-auto font-bold">Soporte:
+          <a className="text-zinc-300" href={`tel:${contact[1]}`}>{contact[1]}</a>
+          <a className="text-zinc-300" href={`tel:${contact[0]}`}>{contact[0]}</a>
+        </p>
       </main>
       <AppFooter />
     </div>
