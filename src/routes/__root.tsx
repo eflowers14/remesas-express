@@ -91,23 +91,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Catálogo de Remesas" },
-      {
-        name: "twitter:description",
-        content:
-          "Consulta las tasas de remesas y cuentas de depósito actualizadas por el administrador.",
-      },
       {
         property: "og:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad",
+        content: "https://remesasexpress.vercel.app/remesas-express-portada.webp",
       },
-      {
-        name: "twitter:image",
-        content:
-          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cf7b1afc-d7d7-4719-addb-9538b1bb71ad",
-      },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:url", content: "https://remesasexpress.vercel.app/" },
+      { property: "og:site_name", content: "Remesas Express" },
+      { property: "og:locale", content: "es_ES" },
+      { name: "robots", content: "index, follow" },
     ],
     links: [
       {
@@ -125,7 +118,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         <HeadContent />
       </head>
