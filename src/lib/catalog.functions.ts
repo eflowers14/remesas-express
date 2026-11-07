@@ -42,7 +42,7 @@ async function assertAdmin(context: ServerContext) {
 
 export const upsertCurrency = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => currencyInput.parse(input))
+  .validator((input: unknown) => currencyInput.parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const payload = { ...data, updated_by: context.userId, updated_at: new Date().toISOString() };
@@ -56,7 +56,7 @@ export const upsertCurrency = createServerFn({ method: "POST" })
 
 export const deleteCurrency = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { error } = await context.supabase.from("currencies").delete().eq("id", data.id);
@@ -91,7 +91,7 @@ const accountInput = z.object({
 
 export const upsertAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => accountInput.parse(input))
+  .validator((input: unknown) => accountInput.parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const email = data.email === "" ? null : (data.email ?? null);
@@ -116,7 +116,7 @@ export const upsertAccount = createServerFn({ method: "POST" })
 
 export const deleteAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { error } = await context.supabase.from("deposit_accounts").delete().eq("id", data.id);
