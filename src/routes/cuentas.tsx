@@ -26,6 +26,7 @@ const contact = ["+5355078599", "+5363646898"];
 function CuentasPage() {
   const { q: initialQ } = Route.useSearch();
   const [q, setQ] = useState(initialQ);
+  const [userHasTyped, setUserHasTyped] = useState(false);
   const { data, isLoading } = useQuery<DepositAccount[]>({
     queryKey: ["accounts"],
     queryFn: async () => {
@@ -37,12 +38,14 @@ function CuentasPage() {
       return data ?? [];
     },
   });
-  const rows = (data ?? []).filter(
-    (c) =>
-      !q ||
+  const rows = (data ?? []).filter((c) => {
+      if (!userHasTyped) return true;
+
+      return (
       c.bank.toLowerCase().includes(q.toLowerCase()) ||
-      (c.currency ?? "").toLowerCase().includes(q.toLowerCase()),
-  );
+      (c.currency ?? "").toLowerCase().includes(q.toLowerCase())
+      );
+  });
 
   return (
     <div className="min-h-screen fondo">
@@ -59,7 +62,10 @@ function CuentasPage() {
           <Input
             placeholder="Buscar Cuenta por Moneda o Banco…"
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => {
+              setUserHasTyped(true);
+              setQ(e.target.value);
+            }}
             className="pl-9"
           />
         </div>
