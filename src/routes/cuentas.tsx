@@ -15,12 +15,17 @@ type DepositAccount = Database["public"]["Tables"]["deposit_accounts"]["Row"];
 
 export const Route = createFileRoute("/cuentas")({
   head: () => ({ meta: [{ title: "Cuentas" }] }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q : "",
+  }),
   component: CuentasPage,
 });
 
 const contact = ["+5355078599", "+5363646898"];
 
 function CuentasPage() {
+  const { q: initialQ } = Route.useSearch();
+  const [q, setQ] = useState(initialQ);
   const { data, isLoading } = useQuery<DepositAccount[]>({
     queryKey: ["accounts"],
     queryFn: async () => {
@@ -32,7 +37,6 @@ function CuentasPage() {
       return data ?? [];
     },
   });
-  const [q, setQ] = useState("");
   const rows = (data ?? []).filter(
     (c) =>
       !q ||

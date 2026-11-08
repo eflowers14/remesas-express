@@ -1,3 +1,3 @@
 ### REMESAS
 
-Una app para que mi hermano pueda llevar un catalogo de sus precios para sus clientes
+Una app para llevar un catálogo de precios de las remesas y sus respectivas cuentas
