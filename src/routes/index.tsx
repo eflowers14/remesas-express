@@ -91,7 +91,7 @@ function TasasPage() {
                       )}
                       {c.deposit_account_id ? (
                         <a
-                          href={`/cuentas#${c.deposit_account_id}`}
+                          href={`/cuentas?q=${encodeURIComponent(c.country ?? "")}#${c.deposit_account_id}`}
                           className="hover:underline"
                         >
                           {c.name}
