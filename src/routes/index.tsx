@@ -85,7 +85,7 @@ function TasasPage() {
               <tbody className="divide-y">
                 {rows.map((c) => (
                   <tr key={c.id} className={c.is_active ? "" : "opacity-50"}>
-                    <td className="px-4 py-3 font-medium">
+                    <td className="px-1 py-3 font-medium">
                       {c.country && (
                         <div className="text-xs text-muted-foreground">{c.country}</div>
                       )}
@@ -100,7 +100,7 @@ function TasasPage() {
                         c.name
                       )}
                     </td>
-                    <td className="px-1 py-2 text-right tabular-nums">
+                    <td className="px-1 py-2 text-left tabular-nums">
                       {formatPrice(Number(c.buy_price))}cup
                     </td>
                     <td className="px-1 py-2 text-xs text-center text-muted-foreground">
