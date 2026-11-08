@@ -7,6 +7,8 @@ import { Search } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
 import { AppFooter } from "@/components/AppFooter";
 import type { Database } from "@/integrations/supabase/types";
+import { useServerFn } from "@tanstack/react-start";
+import { getMyRole } from "@/lib/catalog.functions";
 
 type CurrencyRow = Database["public"]["Tables"]["currencies"]["Row"];
 
@@ -29,6 +31,14 @@ function formatUpdatedAt(value: string) {
 }
 
 function TasasPage() {
+  const getRole = useServerFn(getMyRole);
+  const { data: role } = useQuery({
+    queryKey: ["me-role"],
+    queryFn: () => getRole(),
+  });
+
+  const isAdmin = role?.isAdmin;
+
   const { data, isLoading } = useQuery<CurrencyRow[]>({
     queryKey: ["currencies"],
     queryFn: async () => {
@@ -62,6 +72,9 @@ function TasasPage() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            id="index-search"
+            name="index-search"
+            aria-label="Buscar moneda o país"
             placeholder="Buscar Moneda o País…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -72,26 +85,26 @@ function TasasPage() {
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Cargando…</p>
         ) : (
-          <div className="overflow-hidden bg-card border-outside-border fondo-opuesto">
-            <table className="w-full table-fixed text-sm border">
+          <div className="overflow-hidden bg-card rounded-xl fondo-opuesto">
+            <table className="w-full table-fixed text-sm border rounded-xl">
               <thead className="bg-muted/50 text-left text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="w-1/3 px-4 py-2">Moneda</th>
-                  <th className="w-1/3 px-4 py-2 text-right">Compra</th>
-                  <th className="w-1/5 px-4 py-2 text-center">Notas</th>
-                  <th className="w-1/6 px-4 py-2 text-center">Fecha</th>
+                  <th className="w-1/3 px-2 py-2">Moneda</th>
+                  <th className="w-1/3 px-1 py-2 text-left">Compra</th>
+                  <th className="w-1/2 px-0 py-2 text-center">Notas</th>
+                  {isAdmin && <th className="w-1/6 px-1 py-2 text-center">Fecha</th>}
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {rows.map((c) => (
                   <tr key={c.id} className={c.is_active ? "" : "opacity-50"}>
-                    <td className="px-1 py-3 font-medium">
+                    <td className="px-2 py-3 font-medium">
                       {c.country && (
                         <div className="text-xs text-muted-foreground">{c.country}</div>
                       )}
                       {c.deposit_account_id ? (
                         <a
-                          href={`/cuentas?q=${encodeURIComponent(c.country ?? "")}#${c.deposit_account_id}`}
+                          href={`/cuentas?q=${encodeURIComponent(c.name ?? "")}#${c.deposit_account_id}`}
                           className="hover:underline"
                         >
                           {c.name}
@@ -100,20 +113,20 @@ function TasasPage() {
                         c.name
                       )}
                     </td>
-                    <td className="px-1 py-2 text-left tabular-nums">
+                    <td className="px-2 py-2 text-left tabular-nums">
                       {formatPrice(Number(c.buy_price))}cup
                     </td>
                     <td className="px-1 py-2 text-xs text-center text-muted-foreground">
                       {c.notes}
                     </td>
-                    <td className="px-1 py-2 text-xs text-center text-muted-foreground">
+                    {isAdmin && (<td className="px-1 py-2 text-xs text-center text-muted-foreground">
                       {formatUpdatedAt(c.updated_at)}
-                    </td>
+                    </td>)}
                   </tr>
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-1 py-2 text-center text-sm text-muted-foreground">
+                    <td colSpan={isAdmin ? 4 : 3} className="px-1 py-2 text-center text-sm text-muted-foreground">
                       Sin resultados.
                     </td>
                   </tr>
